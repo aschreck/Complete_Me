@@ -38,5 +38,16 @@ class TrieTest < Minitest::Test
     trie.insert('dog')
     assert_equal 4, trie.word_count
     assert_equal 2, trie.root.children.length
+    trie.insert('bork')
+    trie.insert('taco')
+    assert_equal 6 , trie.word_count
+  end
+
+  def test_it_loads_dictionary
+    trie = Trie.new
+    dictionary = File.read("/usr/share/dict/words")
+    trie.populate(dictionary)
+    assert_equal 235886, trie.word_count
+
   end
 end

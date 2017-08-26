@@ -16,4 +16,13 @@ class Trie
     node = node.children[first_letter]
     insert(word[1..-1], node)
   end
+
+  def populate(dictionary)
+    dictionary.each_line do |word|
+    #look at each line, which has one word.
+    word = word.chomp
+    insert(word)
+    end
+
+  end
 end

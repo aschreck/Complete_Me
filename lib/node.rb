@@ -11,4 +11,5 @@ class Node
     true if @children = {}
   end
 
+
 end
