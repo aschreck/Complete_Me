@@ -24,6 +24,6 @@ class CompleteMeTest < Minitest::Test
     completion.insert('captor')
 
     puts completion.suggest("ca")
-
+    #our code is returning the last node for each path
   end
 end

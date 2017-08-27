@@ -22,9 +22,8 @@ class CompleteMe
   end
 
   def find_prefix(prefix, node = @trie.root)
-    #add condition for if prefix is word.
-    @prefix = prefix and return node if prefix.size == 0
 
+    return node if prefix.size == 0
     first_letter = prefix[0]
     node = node.children[first_letter]
     find_prefix(prefix[1..-1], node)
@@ -32,10 +31,8 @@ class CompleteMe
   end
 
   def complete_word(key, node)
-    word = "#{@prefix}"
+    word = @prefix
     word << key.first
-    #+=?
-    #missing break condition
     if node.children[key.first].flagged
 
       @suggestions << word
@@ -65,6 +62,7 @@ class CompleteMe
   end
 
   def suggest(prefix)
+    @prefix = prefix
     node = find_prefix(prefix) #should return last node of prefix
     rest_of_word(node)
     @suggestions
