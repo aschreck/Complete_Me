@@ -30,41 +30,38 @@ class CompleteMe
 
   end
 
-  def complete_word(key, node)
-    word = @prefix
-    word << key.first
-    if node.children[key.first].flagged
+  def complete_word(key, node, word)
+    word += key.first
 
+    if node.children[key.first].flagged
       @suggestions << word
 
     else
-
       node = node.children[key.first]
+
       if node.children.empty?
         return
+
       else
         node.children.each do |key|
-
-          complete_word(key, node)
+          complete_word(key, node, word)
         end
-      end
 
+      end
     end
   end
 
 
-  def rest_of_word(node)
+  def rest_of_word(node, prefix)
     node.children.each do |key|
-      complete_word(key, node)
+      complete_word(key, node, word = @prefix)
     end
-      #check for flag
-
   end
 
   def suggest(prefix)
     @prefix = prefix
     node = find_prefix(prefix) #should return last node of prefix
-    rest_of_word(node)
+    rest_of_word(node, prefix)
     @suggestions
   end
 end
