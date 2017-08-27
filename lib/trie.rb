@@ -17,9 +17,9 @@ class Trie
     insert(word[1..-1], node)
   end
 
+  #do we need to include dictionary here?
   def populate(dictionary)
     dictionary.each_line do |word|
-    #look at each line, which has one word.
     word = word.chomp
     insert(word)
     end
