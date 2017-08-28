@@ -33,43 +33,44 @@ class CompleteMe
 
   end
 
-  def complete_word(key, node, word)
+  def complete_word(key, node, word, suggestions = [])
     word += key.first
     node = node.children[key.first]
 
     if node.children.empty? #and if node.flagged
-        @suggestions << word
+        suggestions << word
 
     else
-      @suggestions << word if node.flagged
+      suggestions << word if node.flagged
 
         node.children.each do |key|
-          complete_word(key, node, word)
+          complete_word(key, node, word, suggestions)
         end
 
     end
+    suggestions
   end
 
 
   def rest_of_word(node, prefix)
-    node.children.each do |key|
+    suggestions = node.children.map do |key|
       complete_word(key, node, word = @prefix)
     end
+    suggestions
   end
 
   def suggest(prefix)
     @prefix = prefix
     node = find_prefix(prefix) #should return last node of prefix
-    rest_of_word(node, prefix)
-    @suggestions
+    suggestions = rest_of_word(node, prefix).flatten
 
     if node.prefix_selected?
-      weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}
-      suggestion_weights = Hash[@suggestions.zip(weights)]
+      weights = suggestions.map {|suggestion| find_prefix(suggestion).weight}
+      suggestion_weights = Hash[suggestions.zip(weights)]
       ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
       final_suggestions = ordered_suggestions.keys
     else
-      @suggestions
+      suggestions
     end
   end
 
