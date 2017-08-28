@@ -66,7 +66,7 @@ class CompleteMeTest < Minitest::Test
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('capuccino')
+    completion.insert('cappuccino')
     completion.select('ca', 'captive')
 
     assert completion.find_prefix('ca').prefix_selected?
@@ -85,9 +85,9 @@ class CompleteMeTest < Minitest::Test
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('capuccino')
+    completion.insert('cappuccino')
 
-    assert_equal ['cap', 'cappucino', 'captive', 'captor'], completion.suggest('ca')
+    assert_equal ['cap', 'cappuccino', 'captive', 'captor'], completion.suggest('ca')
     #test cap as prefix
   end
 
@@ -96,13 +96,14 @@ class CompleteMeTest < Minitest::Test
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('capuccino')
+    completion.insert('cappuccino')
 
     completion.select('ca', 'captive')
     completion.select('ca', 'captive')
 
-    assert_equal ['captive', 'cap', 'cappucino', 'captor'], completion.suggest('ca')
-    assert_equal ['cap', 'cappucino', 'captive', 'captor'], completion.suggest('c')
+    assert_equal ['captive', 'cap', 'cappuccino', 'captor'], completion.suggest('ca')
+    assert_equal ['captive', 'cap', 'cappuccino', 'captor'], completion.suggest('ca')
+    assert_equal ['cap', 'cappuccino', 'captive', 'captor'], completion.suggest('c')
   end
 
 
