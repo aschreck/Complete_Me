@@ -16,7 +16,8 @@ class CompleteMeTest < Minitest::Test
 
   end
 
-  def test_select
+  def test_suggest
+    skip
     completion= CompleteMe.new
     completion.insert('cat')
     completion.insert('calf')
@@ -25,5 +26,21 @@ class CompleteMeTest < Minitest::Test
 
     puts completion.suggest("ca")
     #our code is returning the last node for each path
+  end
+
+  def test_select
+    completion= CompleteMe.new
+    completion.insert('pi')
+    completion.insert('pizza')
+    completion.insert('pizzeria')
+    completion.insert('pizzicato')
+    completion.insert('pizzle')
+    completion.insert('pize')
+
+    completion.select('piz', 'pizzeria')
+    completion.select('piz', 'pizzeria')
+    #puts completion.suggest('piz')
+    puts completion.suggest('pi')
+
   end
 end

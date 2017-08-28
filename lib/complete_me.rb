@@ -1,4 +1,5 @@
 require_relative "./trie"
+require 'pry'
 
 class CompleteMe
 
@@ -63,5 +64,15 @@ class CompleteMe
     node = find_prefix(prefix) #should return last node of prefix
     rest_of_word(node, prefix)
     @suggestions
+
+    weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}
+    suggestion_weights = Hash[@suggestions.zip(weights)]
+    ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
+    final_suggestions = ordered_suggestions.keys
+  end
+
+  def select(prefix, word_choice)
+    node = find_prefix(word_choice)
+    node.weight += 1
   end
 end

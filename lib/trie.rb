@@ -10,6 +10,7 @@ class Trie
   end
 
   def insert(word, node = @root)
+    #write individual functions for each of these points
     @word_count += 1 and node.flagged = true and return if word.size == 0
     first_letter = word[0]
     node.children[first_letter] = Node.new(first_letter) unless node.children.has_key?(first_letter)
@@ -26,5 +27,5 @@ class Trie
 
   end
 
-  
+
 end
