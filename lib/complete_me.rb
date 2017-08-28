@@ -61,7 +61,7 @@ class CompleteMe
     @prefix = prefix
     node = find_prefix(prefix) #should return last node of prefix
     rest_of_word(node, prefix)
-    @suggestions = @suggestions.sort
+    @suggestions
 
     if node.prefix_selected?
       weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}

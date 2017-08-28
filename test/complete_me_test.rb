@@ -59,6 +59,7 @@ class CompleteMeTest < Minitest::Test
   #   node = completion.find_prefix('ro')
   #
   #   completion.rest_of_word(node, )
+  #look at suggestions, or else see if rest_of_word can return something
   # end
 
   def test_select_flags_chosen_prefixes_and_weights_chosen_words
