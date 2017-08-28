@@ -39,8 +39,8 @@ class CompleteMeTest < Minitest::Test
 
     completion.select('piz', 'pizzeria')
     completion.select('piz', 'pizzeria')
-    #puts completion.suggest('piz')
-    puts completion.suggest('pi')
+    puts completion.suggest('piz')
+    #puts completion.suggest('pi')
 
   end
 end

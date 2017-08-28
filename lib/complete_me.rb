@@ -65,14 +65,22 @@ class CompleteMe
     rest_of_word(node, prefix)
     @suggestions
 
-    weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}
-    suggestion_weights = Hash[@suggestions.zip(weights)]
-    ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
-    final_suggestions = ordered_suggestions.keys
+    if node.prefix_selected?
+      weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}
+      suggestion_weights = Hash[@suggestions.zip(weights)]
+      ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
+      final_suggestions = ordered_suggestions.keys
+    else
+      @suggestions
+    end
   end
 
   def select(prefix, word_choice)
-    node = find_prefix(word_choice)
+    #prefix counter here?
+    prefix = find_prefix(prefix)
+    prefix.prefix_selected = true
+
+    node = find_prefix(word_choice) #find node at end of word selection-rename find_prefix?
     node.weight += 1
   end
 end
