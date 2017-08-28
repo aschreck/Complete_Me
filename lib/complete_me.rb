@@ -3,6 +3,8 @@ require 'pry'
 
 class CompleteMe
 
+  attr_reader :trie
+
   def initialize
     @trie = Trie.new
     @prefix = ''

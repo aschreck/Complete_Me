@@ -54,11 +54,11 @@ class TrieTest < Minitest::Test
     assert_equal ['v','t'], node.children.keys
   end
 
-  # def test_it_loads_dictionary
-  #   trie = Trie.new
-  #   dictionary = File.read("/usr/share/dict/words")
-  #   trie.populate(dictionary)
+  def test_it_loads_dictionary
+    trie = Trie.new
+    dictionary = File.read("/usr/share/dict/words")
+    trie.populate(dictionary)
 
-  #   assert_equal 235886, trie.word_count
-  # end
+    assert_equal 235886, trie.word_count
+  end
 end
