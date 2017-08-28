@@ -35,22 +35,18 @@ class CompleteMe
 
   def complete_word(key, node, word)
     word += key.first
+    node = node.children[key.first]
 
-    if node.children[key.first].flagged
-      @suggestions << word
+    if node.children.empty? #and if node.flagged
+        @suggestions << word
 
     else
-      node = node.children[key.first]
+      @suggestions << word if node.flagged
 
-      if node.children.empty?
-        return
-
-      else
         node.children.each do |key|
           complete_word(key, node, word)
         end
 
-      end
     end
   end
 
