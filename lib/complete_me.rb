@@ -2,13 +2,12 @@ require_relative "./trie"
 require 'pry'
 
 class CompleteMe
-
+#edit count
+#change select to account for invalid words
   attr_reader :trie
 
   def initialize
     @trie = Trie.new
-    @prefix = ''
-    @suggestions =[]
   end
 
   def insert (word, node = @trie.root)
@@ -33,52 +32,60 @@ class CompleteMe
 
   end
 
-  def complete_word(key, node, word)
+  def complete_word(key, node, word, suggestions = [])
     word += key.first
     node = node.children[key.first]
 
-    if node.children.empty? #and if node.flagged
-        @suggestions << word
+    if node.children.empty?
+        suggestions << word
 
     else
-      @suggestions << word if node.flagged
+      suggestions << word if node.flagged
 
         node.children.each do |key|
-          complete_word(key, node, word)
+          complete_word(key, node, word, suggestions)
         end
 
     end
+    suggestions
   end
 
 
-  def rest_of_word(node, prefix)
-    node.children.each do |key|
-      complete_word(key, node, word = @prefix)
+  def collect_all_words(node, prefix, suggestions = [])
+    suggestions << prefix if node.flagged
+
+    suggestions << node.children.map do |key|
+      complete_word(key, node, word = prefix)
     end
+    suggestions.flatten
   end
 
   def suggest(prefix)
-    @prefix = prefix
-    node = find_prefix(prefix) #should return last node of prefix
-    rest_of_word(node, prefix)
-    @suggestions
+    node = find_prefix(prefix)
 
-    if node.prefix_selected?
-      weights = @suggestions.map {|suggestion| find_prefix(suggestion).weight}
-      suggestion_weights = Hash[@suggestions.zip(weights)]
-      ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
-      final_suggestions = ordered_suggestions.keys
+    if node.prefix_weights.empty?
+      suggestions = collect_all_words(node, prefix)
     else
-      @suggestions
+      ordered_weights = Hash[node.prefix_weights.sort_by{|word, weight| weight}.reverse]
+      suggestions = ordered_weights.keys
     end
+    suggestions
+  end
+
+  def create_suggestion_weights(node, suggestions)
+    node.prefix_weights = Hash[suggestions.map {|suggestion| [suggestion, 0]}]
   end
 
   def select(prefix, word_choice)
-    #prefix counter here?
-    prefix = find_prefix(prefix)
-    prefix.prefix_selected = true
+    node = find_prefix(prefix)
+    suggestions = collect_all_words(node, prefix)
 
-    node = find_prefix(word_choice) #find node at end of word selection-rename find_prefix?
-    node.weight += 1
+    if node.prefix_weights.empty?
+      weights = create_suggestion_weights(node, suggestions)
+      weights[word_choice] += 1
+    else
+      node.prefix_weights[word_choice] += 1
+    end
   end
+
 end

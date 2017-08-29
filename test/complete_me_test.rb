@@ -7,13 +7,14 @@ class CompleteMeTest < Minitest::Test
 
   def test_insert_adds_child_nodes_and_raises_word_count
     completion= CompleteMe.new
+    root = completion.trie.root
 
-    assert_equal ({}), completion.trie.root.children
+    assert_equal ({}), root.children
 
     completion.insert('cat')
 
     assert_equal 1 ,completion.count
-    assert_equal ['c'], completion.trie.root.children.keys
+    assert_equal ['c'], root.children.keys
   end
 
   def test_count_increments_when_words_are_added
@@ -27,10 +28,12 @@ class CompleteMeTest < Minitest::Test
     assert_equal 2, completion.count
   end
 
+  #.count after populate and one insert returns one extra word--is this problem??
+
   # def test_populate_adds_dictionary_words
   #   completion= CompleteMe.new
   #   dictionary = File.read("/usr/share/dict/words")
-  #   completion.populate(dictionary)
+  #   completion.populate(dictionary)s
   #
   #   assert_equal 235886, completion.count
   # end
@@ -44,95 +47,98 @@ class CompleteMeTest < Minitest::Test
     assert_equal ['p'], node.children.keys
   end
 
-  def test_complete_word
+  def test_complete_word_collects_node_keys_as_string_returned_as_words_in_array
     completion = CompleteMe.new
     completion.insert('captive')
-    completion.insert('captor')
+    node = completion.find_prefix('cap')
+    key = node.children.keys
+    word = 'cap'
+    suggestions = completion.complete_word(key, node, word)
 
-    assert completion.find_prefix('captive').flagged
-    refute completion.find_prefix('captiv').flagged
+    assert_equal ['captive'], suggestions
   end
 
-  # def test_rest_of_word_completes_word
-  #   completion = CompleteMe.new
-  #   completion.insert('rollercoaster')
-  #   node = completion.find_prefix('ro')
-  #
-  #   completion.rest_of_word(node, )
-  #look at suggestions, or else see if rest_of_word can return something
-  # end
-
-  def test_select_flags_chosen_prefixes_and_weights_chosen_words
+  def test_collect_all_words_returns_array_with_every_full_word_from_starter_node
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
-    completion.select('ca', 'captive')
+    node = completion.find_prefix('cap')
+    suggestions = completion.collect_all_words(node, 'cap')
 
-    assert completion.find_prefix('ca').prefix_selected?
-    refute completion.find_prefix('c').prefix_selected?
-    assert_equal 1, completion.find_prefix('captive').weight
-
-    completion.select('ca', 'captive')
-
-    assert_equal 2, completion.find_prefix('captive').weight
+    assert_instance_of Array, suggestions
+    assert suggestions.include?('cap')
+    assert suggestions.include?('captive')
+    assert suggestions.include?('captor')
+    assert_equal 3, suggestions.length
 
   end
 
+  def test_create_suggestion_weights_creates_hash_with_suggestions_as_keys
+    completion = CompleteMe.new
+    completion.insert('captor')
+    completion.insert('cap')
+    node = completion.find_prefix('cap')
+    suggestions = ['cap', 'captor']
 
-  def test_suggest_lists_unweighted_suggestions_based_on_unchosen_prefixes
+    assert_equal ({'cap' => 0, 'captor'=> 0}), completion.create_suggestion_weights(node, suggestions)
+  end
+
+  def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
+    #test for misspelling or word not inserted?
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
+    node = completion.find_prefix('ca')
 
-    assert_equal ['cap', 'cappuccino', 'captive', 'captor'], completion.suggest('ca')
-    #test cap as prefix
+    assert node.prefix_weights.empty?
+
+    completion.select('ca', 'captive')
+
+    refute node.prefix_weights.empty?
+    assert_equal 1, node.prefix_weights['captive']
+
+    completion.select('ca', 'captive')
+
+    assert_equal 2, node.prefix_weights['captive']
+    assert_equal 0, node.prefix_weights['cap']
   end
 
-  def test_suggest_lists_weighted_suggestions_based_on_prefixes_already_chosen
+  def test_suggest_lists_unweighted_suggestions
+    completion = CompleteMe.new
+    completion.insert('captive')
+    completion.insert('cap')
+    completion.insert('captor')
+    completion.insert('dog')
+    suggestions = completion.suggest('ca')
+
+    assert_equal 3, suggestions.length
+    assert suggestions.include?('captive')
+    assert suggestions.include?('cap')
+    assert suggestions.include?('captor')
+    refute suggestions.include?('dog')
+
+  end
+
+  def test_suggest_lists_weighted_suggestions_based_on_selected_prefixes
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
 
-    completion.select('ca', 'captive')
-    completion.select('ca', 'captive')
+    completion.select('cap', 'captive')
+    completion.select('cap', 'captive')
 
-    assert_equal ['captive', 'cap', 'cappuccino', 'captor'], completion.suggest('ca')
-    assert_equal ['captive', 'cap', 'cappuccino', 'captor'], completion.suggest('ca')
-    assert_equal ['cap', 'cappuccino', 'captive', 'captor'], completion.suggest('c')
+    assert_equal 'captive', completion.suggest('cap').first
+    assert_equal 2, completion.find_prefix('cap').prefix_weights['captive']
+
+    completion.select('ca', 'cap')
+
+    assert_equal 'cap', completion.suggest('ca').first
+    assert_equal 0, completion.find_prefix('ca').prefix_weights['captive']
+    assert_equal 1, completion.find_prefix('ca').prefix_weights['cap']
   end
 
 
-  # def test_suggest
-  #   skip
-  #   completion= CompleteMe.new
-  #   completion.insert('cat')
-  #   completion.insert('calf')
-  #   completion.insert('captive')
-  #   completion.insert('captor')
-  #
-  #   puts completion.suggest("ca")
-  #   #our code is returning the last node for each path
-  # end
-  #
-  # def test_select
-  #   completion= CompleteMe.new
-  #   completion.insert('pi')
-  #   completion.insert('pizza')
-  #   completion.insert('pizzeria')
-  #   completion.insert('pizzicato')
-  #   completion.insert('pizzle')
-  #   completion.insert('pize')
-  #
-  #   completion.select('piz', 'pizzeria')
-  #   completion.select('piz', 'pizzeria')
-  #   p completion.suggest('piz')
-  #   p completion.suggest('pi')
-  #
-  # end
 end
