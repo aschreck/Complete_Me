@@ -52,9 +52,7 @@ class CompleteMe
 
 
   def collect_all_words(node, prefix, suggestions = [])
-    if node.flagged
-      suggestions << prefix
-    end
+    suggestions << prefix if node.flagged
 
     suggestions << node.children.map do |key|
       complete_word(key, node, word = prefix)
