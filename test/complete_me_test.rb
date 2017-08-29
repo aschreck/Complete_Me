@@ -1,6 +1,6 @@
 require './test/test_helper'
 require './lib/complete_me'
-
+require 'csv'
 class CompleteMeTest < Minitest::Test
 
   def test_insert_adds_child_nodes_and_raises_word_count
@@ -27,11 +27,11 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_populate_adds_dictionary_words
-    completion= CompleteMe.new
-    dictionary = File.read("/usr/share/dict/words")
-    completion.populate(dictionary)
-
-    assert_equal 235886, completion.count
+    # completion= CompleteMe.new
+    # dictionary = File.read("/usr/share/dict/words")
+    # completion.populate(dictionary)
+    #
+    # assert_equal 235886, completion.count
   end
 
   def test_find_prefix_iterates_to_last_node_and_returns_node
@@ -136,5 +136,11 @@ class CompleteMeTest < Minitest::Test
     assert_equal 1, completion.find_prefix('ca').prefix_weights['cap']
   end
 
+  def test_denver_suggestions
+    completion = CompleteMe.new
+    completion.populate_from_csv
+
+    puts completion.suggest('828')
+  end
 
 end

@@ -2,7 +2,7 @@ require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/trie'
-require 'pry'
+require 'csv'
 
 class TrieTest < Minitest::Test
 
@@ -79,4 +79,13 @@ class TrieTest < Minitest::Test
 
     assert_equal 235886, trie.count
   end
+
+  def test_populate_works_denver_addresses
+    trie = Trie.new
+
+    trie.csv_to_txt_converter
+    trie.count
+
+  end
+  
 end

@@ -35,4 +35,16 @@ class Trie
     word_count
   end
 
+  def populate_from_csv
+    addresses = File.new('addresses.txt', 'w+')
+    path = '/Users/aaronschreck/turing/1mod/projects/Complete_Me/test/addresses.csv'
+    csv = CSV.read(path, :headers=> true)
+    address_array = csv['FULL_ADDRESS']
+    address_array.each do |address|
+      addresses.write(address + "\n")
+    end
+    file = File.open('addresses.txt')
+    populate(file)
+  end
+
 end

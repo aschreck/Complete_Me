@@ -1,6 +1,5 @@
 require_relative "./trie"
-require 'pry'
-
+require 'CSV'
 class CompleteMe
 #change select to account for invalid words
   attr_reader :trie
@@ -21,6 +20,12 @@ class CompleteMe
   def populate (dictionary)
     @trie.populate (dictionary)
   end
+
+
+  def populate_from_csv
+    @trie.populate_from_csv
+  end
+
 
   def find_prefix(prefix, node = @trie.root)
 
@@ -86,5 +91,6 @@ class CompleteMe
       node.prefix_weights[word_choice] += 1
     end
   end
+
 
 end
