@@ -35,7 +35,7 @@ class CompleteMe
     word += key.first
     node = node.children[key.first]
 
-    if node.children.empty? #and if node.flagged
+    if node.children.empty?
         suggestions << word
 
     else
@@ -50,7 +50,7 @@ class CompleteMe
   end
 
 
-  def rest_of_word(node, prefix)
+  def collect_all_words(node, prefix)
     suggestions = node.children.map do |key|
       complete_word(key, node, word = prefix)
     end
@@ -59,23 +59,30 @@ class CompleteMe
 
   def suggest(prefix)
     node = find_prefix(prefix)
-    suggestions = rest_of_word(node, prefix)
 
-    if node.prefix_selected?
-      weights = suggestions.map {|suggestion| find_prefix(suggestion).weight}
-      suggestion_weights = Hash[suggestions.zip(weights)]
-      ordered_suggestions = Hash[suggestion_weights.sort_by{|word, weight| weight}.reverse]
-      final_suggestions = ordered_suggestions.keys
+    if node.prefix_weights.empty?
+      suggestions = collect_all_words(node, prefix)
     else
-      suggestions
+      ordered_weights = Hash[node.prefix_weights.sort_by{|word, weight| weight}.reverse]
+      suggestions = ordered_weights.keys
     end
+    suggestions
+  end
+
+  def create_suggestion_weights(node, suggestions)
+    node.prefix_weights = Hash[suggestions.map {|suggestion| [suggestion, 0]}]
   end
 
   def select(prefix, word_choice)
-    prefix = find_prefix(prefix)
-    prefix.prefix_selected = true
+    node = find_prefix(prefix)
+    suggestions = collect_all_words(node, prefix)
 
-    node = find_prefix(word_choice) 
-    node.weight += 1
+    if node.prefix_weights.empty?
+      weights = create_suggestion_weights(node, suggestions)
+      weights[word_choice] += 1
+    else
+      node.prefix_weights[word_choice] += 1
+    end
   end
+
 end

@@ -7,13 +7,14 @@ class CompleteMeTest < Minitest::Test
 
   def test_insert_adds_child_nodes_and_raises_word_count
     completion= CompleteMe.new
+    root = completion.trie.root
 
-    assert_equal ({}), completion.trie.root.children
+    assert_equal ({}), root.children
 
     completion.insert('cat')
 
     assert_equal 1 ,completion.count
-    assert_equal ['c'], completion.trie.root.children.keys
+    assert_equal ['c'], root.children.keys
   end
 
   def test_count_increments_when_words_are_added
@@ -46,88 +47,87 @@ class CompleteMeTest < Minitest::Test
     assert_equal ['p'], node.children.keys
   end
 
-  def test_complete_word
+  def test_complete_word_collects_node_keys_as_string_returned_as_words_in_array
     completion = CompleteMe.new
     completion.insert('captive')
-    completion.insert('captor')
+    node = completion.find_prefix('cap')
+    key = node.children.keys
+    word = 'cap'
+    suggestions = completion.complete_word(key, node, word)
 
-    assert completion.find_prefix('captive').flagged
-    refute completion.find_prefix('captiv').flagged
+    assert_equal ['captive'], suggestions
   end
 
-  def test_rest_of_word_completes_word_and_returns_array_with_word
-    completion = CompleteMe.new
-    completion.insert('rollercoaster')
-    node = completion.find_prefix('ro')
-
-    assert_equal ['rollercoaster'], completion.rest_of_word(node, 'ro')
-  end
-
-  def test_select_flags_chosen_prefixes_and_weights_chosen_words
-    #test for misspelling?
+  def test_collect_all_words_returns_array_with_every_full_word_from_starter_node
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
-    completion.select('ca', 'captive')
+    node = completion.find_prefix('cap')
+    suggestions = completion.collect_all_words(node, 'cap')
 
-    assert completion.find_prefix('ca').prefix_selected?
-    refute completion.find_prefix('c').prefix_selected?
-    assert_equal 1, completion.find_prefix('captive').weight
-
-    completion.select('ca', 'captive')
-
-    assert_equal 2, completion.find_prefix('captive').weight
+    assert_instance_of Array, suggestions
+    assert suggestions.include?('cap')
+    assert suggestions.include?('captive')
+    assert suggestions.include?('captor')
+    assert_equal 3, suggestions.length
 
   end
 
-  def check_array_for_desired_values(completion, suggestions)
-  suggestions = completion.suggest('ca')
-  suggestions.each {|suggestion| suggestion.include?('cap')}
-  suggestions.each {|suggestion| suggestion.include?('cappuccino')}
-  suggestions.each {|suggestion| suggestion.include?('captive')}
-  suggestions.each {|suggestion| suggestion.include?('captor')}
+  def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
+    #test for misspelling or word not inserted?
+    completion = CompleteMe.new
+    completion.insert('captive')
+    completion.insert('captor')
+    completion.insert('cap')
+    node = completion.find_prefix('ca')
+
+    assert node.prefix_weights.empty?
+
+    completion.select('ca', 'captive')
+
+    refute node.prefix_weights.empty?
+    assert_equal 1, node.prefix_weights['captive']
+
+    completion.select('ca', 'captive')
+
+    assert_equal 2, node.prefix_weights['captive']
+    assert_equal 0, node.prefix_weights['cap']
   end
 
   def test_suggest_lists_unweighted_suggestions_based_on_unchosen_prefixes
     completion = CompleteMe.new
     completion.insert('captive')
-    completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
+    completion.insert('captor')
     completion.insert('dog')
     suggestions = completion.suggest('ca')
 
-    assert_equal 4, suggestions.length
-    assert check_array_for_desired_values(completion, suggestions)
+    assert_equal 3, suggestions.length
+    assert suggestions.include?('captive')
+    assert suggestions.include?('cap')
+    assert suggestions.include?('captor')
     refute suggestions.include?('dog')
-
-    suggestions = completion.suggest('cap')
-
-    assert check_array_for_desired_values(completion, suggestions)
 
   end
 
-#crap!! weighting is still added even with other prefixes so weight for substrings is off
   def test_suggest_lists_weighted_suggestions_based_on_prefixes_already_chosen
     #doesn't seem to include word itself? should it?
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
     completion.insert('cap')
-    completion.insert('cappuccino')
 
-    completion.select('ca', 'captive')
-    completion.select('ca', 'captive')
+    completion.select('cap', 'captive')
+    completion.select('cap', 'captive')
 
-    assert_equal 'captive', completion.suggest('ca').first
-    assert_equal 2, completion.find_prefix('captive').weight
+    assert_equal 'captive', completion.suggest('cap').first
+    assert_equal 2, completion.find_prefix('cap').prefix_weights['captive']
 
-    completion.select('ca', 'cappuccino')
+    completion.select('ca', 'cap')
 
-    assert_equal 'captive', completion.suggest('ca').first
-    assert_equal 2, completion.find_prefix('captive').weight
-
+    assert_equal 'cap', completion.suggest('ca').first
+    assert_equal 0, completion.find_prefix('ca').prefix_weights['captive']
+    assert_equal 1, completion.find_prefix('ca').prefix_weights['cap']
   end
 end
