@@ -2,6 +2,7 @@ require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/trie'
+require 'pry'
 
 class TrieTest < Minitest::Test
 
@@ -12,7 +13,7 @@ class TrieTest < Minitest::Test
   def test_it_initializes_with_root_and_zero_words
     trie = Trie.new
     assert_instance_of Node, trie.root
-    assert_equal 0, trie.word_count
+    assert_equal 0, trie.count
   end
 
   def test_root_knows_children
@@ -37,13 +38,27 @@ class TrieTest < Minitest::Test
     assert_equal ['c', 'a', 't'], keys
   end
 
-  def test_insert_creates_only_necessary_nodes_and_increases_count
+  def test_count_increments_for_each_full_word_in_trie
+    trie = Trie.new
+    trie.insert('a')
+
+    assert_equal 1, trie.count
+
+    trie.insert('axe')
+    trie.insert('axle')
+    trie.insert('butter')
+
+    assert_equal 4, trie.count
+  end
+
+
+  def test_insert_creates_only_necessary_nodes
     trie = Trie.new
     trie.insert('denver')
     trie.insert('dentist')
     node = trie.root
 
-    assert_equal 2, trie.word_count
+    assert_equal 2, trie.count
     assert_equal 1, node.children.length
     assert_equal 'd', node.children.keys[0]
 
@@ -54,11 +69,11 @@ class TrieTest < Minitest::Test
     assert_equal ['v','t'], node.children.keys
   end
 
-  def test_it_loads_dictionary
-    trie = Trie.new
-    dictionary = File.read("/usr/share/dict/words")
-    trie.populate(dictionary)
-
-    assert_equal 235886, trie.word_count
-  end
+  # def test_it_loads_dictionary
+  #   trie = Trie.new
+  #   dictionary = File.read("/usr/share/dict/words")
+  #   trie.populate(dictionary)
+  #
+  #   assert_equal 235886, trie.count
+  # end
 end
