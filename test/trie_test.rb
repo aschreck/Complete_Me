@@ -6,7 +6,7 @@ require 'pry'
 
 class TrieTest < Minitest::Test
 
-  def test_it_exists
+  def test_trie_exists
     assert_instance_of Trie, Trie.new
   end
 
@@ -21,7 +21,7 @@ class TrieTest < Minitest::Test
     assert_equal ({}), trie.root.children
 
     trie.insert('a')
-    assert_equal 'a', trie.root.children.keys[0]
+    assert_equal ['a'], trie.root.children.keys
   end
 
   def test_insert_creates_nodes_with_populated_children_hashes
@@ -40,6 +40,9 @@ class TrieTest < Minitest::Test
 
   def test_count_increments_for_each_full_word_in_trie
     trie = Trie.new
+
+    assert_equal 0, trie.count
+
     trie.insert('a')
 
     assert_equal 1, trie.count
@@ -52,7 +55,7 @@ class TrieTest < Minitest::Test
   end
 
 
-  def test_insert_creates_only_necessary_nodes
+  def test_insert_creates_only_necessary_nodes_and_flags_full_words
     trie = Trie.new
     trie.insert('denver')
     trie.insert('dentist')
@@ -69,11 +72,11 @@ class TrieTest < Minitest::Test
     assert_equal ['v','t'], node.children.keys
   end
 
-  # def test_it_loads_dictionary
-  #   trie = Trie.new
-  #   dictionary = File.read("/usr/share/dict/words")
-  #   trie.populate(dictionary)
-  #
-  #   assert_equal 235886, trie.count
-  # end
+  def test_it_loads_dictionary
+    trie = Trie.new
+    dictionary = File.read("/usr/share/dict/words")
+    trie.populate(dictionary)
+
+    assert_equal 235886, trie.count
+  end
 end

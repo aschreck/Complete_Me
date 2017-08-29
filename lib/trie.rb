@@ -2,11 +2,10 @@ require_relative './node'
 
 class Trie
 
-  attr_reader :root, :word_count
+  attr_reader :root
 
   def initialize
     @root = Node.new("")
-    #oops--double counts insert
   end
 
   def insert(word, node = @root)

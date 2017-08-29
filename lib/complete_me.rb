@@ -2,7 +2,6 @@ require_relative "./trie"
 require 'pry'
 
 class CompleteMe
-#edit count
 #change select to account for invalid words
   attr_reader :trie
 
@@ -15,7 +14,7 @@ class CompleteMe
   end
 
   def count
-    @trie.word_count
+    @trie.count
   end
 
 

@@ -15,6 +15,7 @@ class NodeTest < Minitest::Test
     node = Node.new
 
     assert_equal ({}), node.children
+    refute node.has_children?
   end
 
   def test_initializes_with_flag_set_to_false

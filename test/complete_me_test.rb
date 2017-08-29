@@ -28,8 +28,6 @@ class CompleteMeTest < Minitest::Test
     assert_equal 2, completion.count
   end
 
-  #.count after populate and one insert returns one extra word--is this problem??
-
   # def test_populate_adds_dictionary_words
   #   completion= CompleteMe.new
   #   dictionary = File.read("/usr/share/dict/words")
