@@ -1,0 +1,18 @@
+GEM
+  specs:
+    docile (1.1.5)
+    json (2.0.2)
+    simplecov (0.15.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  simplecov
+
+BUNDLED WITH
+   1.15.3
