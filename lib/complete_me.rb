@@ -2,7 +2,8 @@ require_relative "./trie"
 require 'pry'
 
 class CompleteMe
-
+#edit count
+#change select to account for invalid words
   attr_reader :trie
 
   def initialize
@@ -50,8 +51,12 @@ class CompleteMe
   end
 
 
-  def collect_all_words(node, prefix)
-    suggestions = node.children.map do |key|
+  def collect_all_words(node, prefix, suggestions = [])
+    if node.flagged
+      suggestions << prefix
+    end
+
+    suggestions << node.children.map do |key|
       complete_word(key, node, word = prefix)
     end
     suggestions.flatten

@@ -74,6 +74,16 @@ class CompleteMeTest < Minitest::Test
 
   end
 
+  def test_create_suggestion_weights_creates_hash_with_suggestions_as_keys
+    completion = CompleteMe.new
+    completion.insert('captor')
+    completion.insert('cap')
+    node = completion.find_prefix('cap')
+    suggestions = ['cap', 'captor']
+
+    assert_equal ({'cap' => 0, 'captor'=> 0}), completion.create_suggestion_weights(node, suggestions)
+  end
+
   def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
     #test for misspelling or word not inserted?
     completion = CompleteMe.new
@@ -95,7 +105,7 @@ class CompleteMeTest < Minitest::Test
     assert_equal 0, node.prefix_weights['cap']
   end
 
-  def test_suggest_lists_unweighted_suggestions_based_on_unchosen_prefixes
+  def test_suggest_lists_unweighted_suggestions
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('cap')
@@ -111,8 +121,7 @@ class CompleteMeTest < Minitest::Test
 
   end
 
-  def test_suggest_lists_weighted_suggestions_based_on_prefixes_already_chosen
-    #doesn't seem to include word itself? should it?
+  def test_suggest_lists_weighted_suggestions_based_on_selected_prefixes
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')
@@ -130,4 +139,6 @@ class CompleteMeTest < Minitest::Test
     assert_equal 0, completion.find_prefix('ca').prefix_weights['captive']
     assert_equal 1, completion.find_prefix('ca').prefix_weights['cap']
   end
+
+
 end
