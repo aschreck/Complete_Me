@@ -7,6 +7,7 @@ class Trie
   def initialize
     @root = Node.new("")
     @word_count = 0
+    #oops--double counts insert
   end
 
   def insert(word, node = @root)

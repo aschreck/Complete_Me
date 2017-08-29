@@ -7,8 +7,6 @@ class CompleteMe
 
   def initialize
     @trie = Trie.new
-    @prefix = ''
-    @suggestions =[]
   end
 
   def insert (word, node = @trie.root)
@@ -54,15 +52,14 @@ class CompleteMe
 
   def rest_of_word(node, prefix)
     suggestions = node.children.map do |key|
-      complete_word(key, node, word = @prefix)
+      complete_word(key, node, word = prefix)
     end
-    suggestions
+    suggestions.flatten
   end
 
   def suggest(prefix)
-    @prefix = prefix
-    node = find_prefix(prefix) #should return last node of prefix
-    suggestions = rest_of_word(node, prefix).flatten
+    node = find_prefix(prefix)
+    suggestions = rest_of_word(node, prefix)
 
     if node.prefix_selected?
       weights = suggestions.map {|suggestion| find_prefix(suggestion).weight}
@@ -75,11 +72,10 @@ class CompleteMe
   end
 
   def select(prefix, word_choice)
-    #prefix counter here?
     prefix = find_prefix(prefix)
     prefix.prefix_selected = true
 
-    node = find_prefix(word_choice) #find node at end of word selection-rename find_prefix?
+    node = find_prefix(word_choice) 
     node.weight += 1
   end
 end
