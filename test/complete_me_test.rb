@@ -214,6 +214,7 @@ class CompleteMeTest < Minitest::Test
   end
 
 
+
   # def test_denver_suggestions
   #   completion = CompleteMe.new
   #   completion.populate_from_csv

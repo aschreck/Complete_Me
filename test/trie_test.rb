@@ -87,6 +87,11 @@ class TrieTest < Minitest::Test
     assert_equal 235886, trie.count
   end
 
+  # def test_it_creates_test_file
+  #   trie = Trie.new
+  #   file = trie.pick_one_hundred_random_lines_from_txt_file
+  # end
+
   #add csv tests
   #refactor
   #check tests I wrote tonight...
