@@ -144,7 +144,6 @@ class CompleteMeTest < Minitest::Test
   # end
 
   def test_select_returns_nil_if_prefix_is_invalid
-    #test for misspelling or word not inserted?
     completion = CompleteMe.new
     completion.insert('captive')
 
@@ -152,7 +151,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_select_returns_nil_if_word_choice_is_invalid
-    #test for misspelling or word not inserted?
     completion = CompleteMe.new
     completion.insert('captive')
 
