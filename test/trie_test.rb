@@ -70,6 +70,15 @@ class TrieTest < Minitest::Test
     assert_equal ['v','t'], node.children.keys
   end
 
+  def test_insert_does_not_flag_root_given_empty_string
+    trie = Trie.new
+    trie.insert('')
+
+    assert_equal 0, trie.count
+    assert_equal 0, trie.root.children.length
+
+  end
+
   def test_it_loads_dictionary
     trie = Trie.new
     dictionary = File.read("/usr/share/dict/words")
