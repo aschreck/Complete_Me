@@ -1,4 +1,4 @@
-require './test_helper'
+require './test/test_helper'
 require './lib/trie'
 require 'csv'
 
@@ -78,12 +78,12 @@ class TrieTest < Minitest::Test
     assert_equal 235886, trie.count
   end
 
-  def test_populate_works_denver_addresses
-    trie = Trie.new
-
-    trie.csv_to_txt_converter
-    trie.count
-
-  end
+  #add csv tests
+  #refactor
+  #check tests I wrote tonight...
+  #data file
+  #clean up prys, attr_,
+  #anything with csv file? (can you do path from root of project file so it can be called from any computer?)
+  #node.has_children? methd--test, see if you can insert elsewhere
 
 end
