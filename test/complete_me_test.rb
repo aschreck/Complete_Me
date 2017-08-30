@@ -122,26 +122,26 @@ class CompleteMeTest < Minitest::Test
     assert_nil completion.create_suggestion_weights(node, suggestions)
   end
 
-  # def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
-  #   #test for misspelling or word not inserted?
-  #   completion = CompleteMe.new
-  #   completion.insert('captive')
-  #   completion.insert('captor')
-  #   completion.insert('cap')
-  #   node = completion.find_prefix('ca')
-  #
-  #   assert node.prefix_weights.empty?
-  #
-  #   completion.select('ca', 'captive')
-  #
-  #   refute node.prefix_weights.empty?
-  #   assert_equal 1, node.prefix_weights['captive']
-  #
-  #   completion.select('ca', 'captive')
-  #
-  #   assert_equal 2, node.prefix_weights['captive']
-  #   assert_equal 0, node.prefix_weights['cap']
-  # end
+  def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
+    #test for misspelling or word not inserted?
+    completion = CompleteMe.new
+    completion.insert('captive')
+    completion.insert('captor')
+    completion.insert('cap')
+    node = completion.find_prefix('ca')
+
+    assert node.prefix_weights.empty?
+
+    completion.select('ca', 'captive')
+
+    refute node.prefix_weights.empty?
+    assert_equal 1, node.prefix_weights['captive']
+
+    completion.select('ca', 'captive')
+
+    assert_equal 2, node.prefix_weights['captive']
+    assert_equal 0, node.prefix_weights['cap']
+  end
 
   def test_select_returns_nil_if_prefix_is_invalid
     completion = CompleteMe.new

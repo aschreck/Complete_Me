@@ -79,7 +79,7 @@ class TrieTest < Minitest::Test
 
   end
 
-  def test_it_loads_dictionary
+  def test_it_populates_dictionary_from_file_by_inserting_full_words
     trie = Trie.new
     dictionary = File.read("/usr/share/dict/words")
     trie.populate(dictionary)
@@ -87,17 +87,28 @@ class TrieTest < Minitest::Test
     assert_equal 235886, trie.count
   end
 
-  # def test_it_creates_test_file
-  #   trie = Trie.new
-  #   file = trie.pick_one_hundred_random_lines_from_txt_file
-  # end
+  def test_it_creates_addresses_file_from_csv_file
+    trie = Trie.new
+    addresses_file = trie.create_addresses_file_from_csv
+
+    assert_equal File, addresses_file.class
+    assert_equal "7962 E 49th Pl", File.open('data/addresses.txt') {|file| file.readline}
+  end
+
+  def test_it_populates_addresses_from_file_by_inserting_full_addresses
+    trie = Trie.new
+    dictionary = File.read('data/test_data.txt')
+
+    trie.populate(dictionary)
+
+    assert_equal 100, trie.count
+    #test that specific line appears in trie
+  end
 
   #add csv tests
   #refactor
   #check tests I wrote tonight...
-  #data file
   #clean up prys, attr_,
-  #anything with csv file? (can you do path from root of project file so it can be called from any computer?)
   #node.has_children? methd--test, see if you can insert elsewhere
 
 end

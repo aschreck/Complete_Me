@@ -40,25 +40,24 @@ class Trie
     word_count
   end
 
-  #doesn't work on my computer--is this issue for instructor testing?
-  def populate_from_csv
-    addresses = File.new('addresses.txt', 'w+')
-    path = '/test/data/addresses.csv'
+  def create_addresses_file_from_csv
+    addresses = File.new('data/addresses.txt', 'w+')
+    path = 'data/addresses.csv'
     csv = CSV.read(path, :headers=> true)
     address_array = csv['FULL_ADDRESS']
     address_array.each do |address|
       addresses.write(address + "\n")
     end
-    file = File.open('/test/data/addresses.txt')
+    file = File.open('data/addresses.txt')
     populate(file)
   end
 
-  def pick_one_hundred_random_lines_from_txt_file
-    test_data = File.new('data/test_data.txt', 'w+')
-    100.times do
-      data = File.readlines('data/addresses.txt').sample
-      test_data.write(data)
-    end
-  end
+  # def pick_one_hundred_random_lines_from_txt_file
+  #   test_data = File.new('data/test_data.txt', 'w+')
+  #   100.times do
+  #     data = File.readlines('data/addresses.txt').sample
+  #     test_data.write(data)
+  #   end
+  # end
 
 end
