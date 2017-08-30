@@ -1,4 +1,5 @@
 require_relative './node'
+require 'pry'
 
 class Trie
 
@@ -9,18 +10,26 @@ class Trie
   end
 
   def insert(word, node = @root)
-    #write individual functions for each of these points
-    if word.size == 0
-      if node != @root
-        node.flagged = true and return node
-      else
-        return nil
-      end
-    end
-    first_letter = word[0]
-    node.children[first_letter] = Node.new unless node.children.has_key?(first_letter)
-    node = node.children[first_letter]
+    node.flagged = true and return node if end_of_word?(word, node)
+    return nil if input_empty_string?(word, node)
+
+    node = create_word_nodes(word, node)
     insert(word[1..-1], node)
+  end
+
+  def create_word_nodes(word, node)
+    first_letter = word[0]
+    children = node.children
+    children[first_letter] = Node.new unless children.has_key?(first_letter)
+    node = children[first_letter]
+  end
+
+  def end_of_word?(word, node)
+    word.size == 0 and node != @root
+  end
+
+  def input_empty_string?(word, node)
+    word.size == 0 and node == @root
   end
 
   def populate(dictionary)
