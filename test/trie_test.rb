@@ -80,6 +80,7 @@ class TrieTest < Minitest::Test
   end
 
   def test_it_populates_dictionary_from_file_by_inserting_full_words
+    skip
     trie = Trie.new
     dictionary = File.read("/usr/share/dict/words")
     trie.populate(dictionary)
@@ -88,6 +89,7 @@ class TrieTest < Minitest::Test
   end
 
   def test_it_creates_addresses_file_from_csv_file
+    skip
     trie = Trie.new
     addresses_file = trie.create_addresses_file_from_csv
 
@@ -96,6 +98,7 @@ class TrieTest < Minitest::Test
   end
 
   def test_it_populates_addresses_from_file_by_inserting_full_addresses
+    skip
     trie = Trie.new
     dictionary = File.read('data/test_data.txt')
 

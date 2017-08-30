@@ -52,12 +52,4 @@ class Trie
     populate(file)
   end
 
-  # def pick_one_hundred_random_lines_from_txt_file
-  #   test_data = File.new('data/test_data.txt', 'w+')
-  #   100.times do
-  #     data = File.readlines('data/addresses.txt').sample
-  #     test_data.write(data)
-  #   end
-  # end
-
 end

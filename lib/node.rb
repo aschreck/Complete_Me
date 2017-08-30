@@ -9,7 +9,7 @@ class Node
   end
 
   def has_children?
-    false if @children.empty?
+    true unless @children.empty?    
   end
 
 end

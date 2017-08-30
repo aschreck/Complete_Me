@@ -22,4 +22,10 @@ class NodeTest < Minitest::Test
     refute node.flagged
   end
 
+  def test_node_knows_children
+    node = Node.new
+    node.children["a"] = 'ardvark'
+    assert node.has_children?
+    refute node.children.empty?
+  end
 end
