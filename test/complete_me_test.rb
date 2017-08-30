@@ -213,13 +213,16 @@ class CompleteMeTest < Minitest::Test
     assert suggestions.include?('tag')
   end
 
+  def test_suggest_returns_array_of_address_suggestions
+    completion = CompleteMe.new
+    dictionary = File.open('data/test_data.txt', 'r')
+    completion.populate(dictionary)
+    suggestions = completion.suggest("10")
 
-
-  # def test_denver_suggestions
-  #   completion = CompleteMe.new
-  #   completion.populate_from_csv
-  #
-  #   puts completion.suggest('828')
-  # end
+    assert_instance_of Array, suggestions
+    assert suggestions.include?("1020 15th St Spc PK427")
+    assert suggestions.include?('100 Park Ave W # 706')
+    assert_equal 2, suggestions.length
+  end
 
 end

@@ -5,7 +5,7 @@ class Trie
   attr_reader :root
 
   def initialize
-    @root = Node.new("")
+    @root = Node.new
   end
 
   def insert(word, node = @root)
@@ -18,7 +18,7 @@ class Trie
       end
     end
     first_letter = word[0]
-    node.children[first_letter] = Node.new(first_letter) unless node.children.has_key?(first_letter)
+    node.children[first_letter] = Node.new unless node.children.has_key?(first_letter)
     node = node.children[first_letter]
     insert(word[1..-1], node)
   end
