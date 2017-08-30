@@ -26,12 +26,28 @@ class CompleteMeTest < Minitest::Test
     assert_equal 2, completion.count
   end
 
-  def test_populate_adds_dictionary_words
-    # completion= CompleteMe.new
-    # dictionary = File.read("/usr/share/dict/words")
-    # completion.populate(dictionary)
-    #
-    # assert_equal 235886, completion.count
+  # def test_populate_adds_dictionary_words
+  #   # completion= CompleteMe.new
+  #   # dictionary = File.read("/usr/share/dict/words")
+  #   # completion.populate(dictionary)
+  #   #
+  #   # assert_equal 235886, completion.count
+  # end
+
+  def test_find_prefix_iterates_to_last_node_and_returns_node
+    completion = CompleteMe.new
+    completion.insert('captive')
+    node = completion.find_prefix('ca')
+
+    assert_instance_of Node, node
+    assert_equal ['p'], node.children.keys
+  end
+
+  def test_find_prefix_returns_nil_when_prefix_is_invalid
+    completion = CompleteMe.new
+    completion.insert('captive')
+
+    assert_nil completion.find_prefix('ta')
   end
 
   def test_find_prefix_iterates_to_last_node_and_returns_node
@@ -136,11 +152,11 @@ class CompleteMeTest < Minitest::Test
     assert_equal 1, completion.find_prefix('ca').prefix_weights['cap']
   end
 
-  def test_denver_suggestions
-    completion = CompleteMe.new
-    completion.populate_from_csv
-
-    puts completion.suggest('828')
-  end
+  # def test_denver_suggestions
+  #   completion = CompleteMe.new
+  #   completion.populate_from_csv
+  #
+  #   puts completion.suggest('828')
+  # end
 
 end

@@ -1,6 +1,4 @@
-require 'minitest'
-require 'minitest/autorun'
-require 'minitest/pride'
+require './test_helper'
 require './lib/trie'
 require 'csv'
 
@@ -87,5 +85,5 @@ class TrieTest < Minitest::Test
     trie.count
 
   end
-  
+
 end

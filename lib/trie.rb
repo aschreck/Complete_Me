@@ -35,6 +35,7 @@ class Trie
     word_count
   end
 
+  #doesn't work on my computer--is this issue for instructor testing?
   def populate_from_csv
     addresses = File.new('addresses.txt', 'w+')
     path = '/Users/aaronschreck/turing/1mod/projects/Complete_Me/test/addresses.csv'

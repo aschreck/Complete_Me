@@ -1,6 +1,4 @@
-require "minitest"
-#require "minitest/emoji"
-require "minitest/autorun"
+require './test_helper'
 require "./lib/complete_me"
 
 class CompleteMeTest < Minitest::Test

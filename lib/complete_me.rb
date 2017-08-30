@@ -1,5 +1,6 @@
 require_relative "./trie"
 require 'CSV'
+require 'pry'
 class CompleteMe
 #change select to account for invalid words
   attr_reader :trie
@@ -31,6 +32,7 @@ class CompleteMe
 
     return node if prefix.size == 0
     first_letter = prefix[0]
+    return nil if !node.children.has_key?(first_letter)
     node = node.children[first_letter]
     find_prefix(prefix[1..-1], node)
 
