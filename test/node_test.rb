@@ -1,6 +1,4 @@
-require 'minitest'
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative "./test_helper"
 require './lib/node'
 
 class NodeTest < Minitest::Test

@@ -10,7 +10,13 @@ class Trie
 
   def insert(word, node = @root)
     #write individual functions for each of these points
-    node.flagged = true and return if word.size == 0
+    if word.size == 0
+      if node != @root
+        node.flagged = true and return node
+      else
+        return nil
+      end
+    end
     first_letter = word[0]
     node.children[first_letter] = Node.new(first_letter) unless node.children.has_key?(first_letter)
     node = node.children[first_letter]
@@ -35,6 +41,7 @@ class Trie
     word_count
   end
 
+  #doesn't work on my computer--is this issue for instructor testing?
   def populate_from_csv
     addresses = File.new('addresses.txt', 'w+')
     path = '/Users/aaronschreck/turing/1mod/projects/Complete_Me/test/addresses.csv'
