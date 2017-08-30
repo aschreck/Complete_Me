@@ -23,7 +23,6 @@ class Trie
     insert(word[1..-1], node)
   end
 
-  #do we need to include dictionary here?
   def populate(dictionary)
     dictionary.each_line do |word|
     word = word.chomp
@@ -44,13 +43,13 @@ class Trie
   #doesn't work on my computer--is this issue for instructor testing?
   def populate_from_csv
     addresses = File.new('addresses.txt', 'w+')
-    path = '/Users/aaronschreck/turing/1mod/projects/Complete_Me/test/addresses.csv'
+    path = '/test/data/addresses.csv'
     csv = CSV.read(path, :headers=> true)
     address_array = csv['FULL_ADDRESS']
     address_array.each do |address|
       addresses.write(address + "\n")
     end
-    file = File.open('addresses.txt')
+    file = File.open('/test/data/addresses.txt')
     populate(file)
   end
 

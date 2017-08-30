@@ -1,5 +1,5 @@
 require_relative "./trie"
-require 'CSV'
+require 'csv'
 require 'pry'
 
 class CompleteMe
