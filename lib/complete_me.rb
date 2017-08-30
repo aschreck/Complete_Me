@@ -39,6 +39,7 @@ class CompleteMe
   end
 
   def complete_word(key, node, word, suggestions = [])
+    return nil if !node.children.has_key?(key.first)
     word += key.first
     node = node.children[key.first]
 

@@ -50,24 +50,15 @@ class CompleteMeTest < Minitest::Test
     assert_nil completion.find_prefix('ta')
   end
 
-  def test_find_prefix_iterates_to_last_node_and_returns_node
-    completion = CompleteMe.new
-    completion.insert('captive')
-    node = completion.find_prefix('ca')
-
-    assert_instance_of Node, node
-    assert_equal ['p'], node.children.keys
-  end
-
   def test_complete_word_collects_node_keys_as_string_returned_as_words_in_array
     completion = CompleteMe.new
     completion.insert('captive')
     node = completion.find_prefix('cap')
     key = node.children.keys
     word = 'cap'
-    suggestions = completion.complete_word(key, node, word)
+    completed_word = completion.complete_word(key, node, word)
 
-    assert_equal ['captive'], suggestions
+    assert_equal ['captive'], completed_word
   end
 
   def test_collect_all_words_returns_array_with_every_full_word_from_starter_node
@@ -76,13 +67,27 @@ class CompleteMeTest < Minitest::Test
     completion.insert('captor')
     completion.insert('cap')
     node = completion.find_prefix('cap')
-    suggestions = completion.collect_all_words(node, 'cap')
+    all_words = completion.collect_all_words(node, 'cap')
 
-    assert_instance_of Array, suggestions
-    assert suggestions.include?('cap')
-    assert suggestions.include?('captive')
-    assert suggestions.include?('captor')
-    assert_equal 3, suggestions.length
+    assert_instance_of Array, all_words
+    assert all_words.include?('cap')
+    assert all_words.include?('captive')
+    assert all_words.include?('captor')
+    assert_equal 3, all_words.length
+
+  end
+
+  def test_collect_all_words_returns_array_with_every_full_word_from_root
+    completion = CompleteMe.new
+    completion.insert('dinglehopper')
+    completion.insert('captor')
+    node = completion.trie.root
+    all_words = completion.collect_all_words(node, '')
+
+    assert_instance_of Array, all_words
+    assert all_words.include?('dinglehopper')
+    assert all_words.include?('captor')
+    assert_equal 2, all_words.length
 
   end
 
