@@ -12,7 +12,7 @@ class NodeTest < Minitest::Test
   def test_it_initializes_with_empty_child_node_hash
     node = Node.new
 
-    assert_equal ({}), node.children
+    assert node.children.empty?
     refute node.has_children?
   end
 
@@ -25,6 +25,7 @@ class NodeTest < Minitest::Test
   def test_node_knows_children
     node = Node.new
     node.children["a"] = 'ardvark'
+
     assert node.has_children?
     refute node.children.empty?
   end

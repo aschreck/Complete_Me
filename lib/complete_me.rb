@@ -1,6 +1,5 @@
 require_relative "./trie"
 require 'csv'
-require 'pry'
 
 class CompleteMe
 
@@ -18,23 +17,20 @@ class CompleteMe
     @trie.count
   end
 
-
   def populate (dictionary)
     @trie.populate (dictionary)
   end
 
-
   def populate_from_csv
     @trie.populate_from_csv
   end
-
 
   def find_prefix(prefix, node = @trie.root)
     return node if prefix.size == 0
     first_letter = prefix[0]
     node = node.children[first_letter]
     return nil if node == nil
-    
+
     find_prefix(prefix[1..-1], node)
   end
 
@@ -45,14 +41,12 @@ class CompleteMe
 
     if node.children.empty?
         suggestions << word
-
     else
       suggestions << word if node.flagged
 
-        node.children.each do |key|
-          complete_word(key, node, word, suggestions)
-        end
-
+      node.children.each do |key|
+        complete_word(key, node, word, suggestions)
+      end
     end
     suggestions
   end
@@ -100,6 +94,5 @@ class CompleteMe
       node.prefix_weights[word_choice] += 1
     end
   end
-
 
 end

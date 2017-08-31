@@ -123,7 +123,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_select_creates_or_edits_selection_hash_with_weight_for_chosen_word
-    #test for misspelling or word not inserted?
     completion = CompleteMe.new
     completion.insert('captive')
     completion.insert('captor')

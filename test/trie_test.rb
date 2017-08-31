@@ -136,8 +136,5 @@ class TrieTest < Minitest::Test
     assert_equal 100, trie.count
     assert_equal ('1'..'9').to_a, trie.root.children.keys.sort
   end
-
-  #clean up prys, attr_,
-  #node.has_children? methd--test, see if you can insert elsewhere
-
+  
 end
