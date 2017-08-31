@@ -30,13 +30,12 @@ class CompleteMe
 
 
   def find_prefix(prefix, node = @trie.root)
-
     return node if prefix.size == 0
     first_letter = prefix[0]
     node = node.children[first_letter]
     return nil if node == nil
+    
     find_prefix(prefix[1..-1], node)
-
   end
 
   def complete_word(key, node, word, suggestions = [])

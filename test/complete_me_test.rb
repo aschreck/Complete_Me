@@ -27,13 +27,13 @@ class CompleteMeTest < Minitest::Test
     assert_equal 2, completion.count
   end
 
-  # def test_populate_adds_dictionary_words
-  #   # completion= CompleteMe.new
-  #   # dictionary = File.read("/usr/share/dict/words")
-  #   # completion.populate(dictionary)
-  #   #
-  #   # assert_equal 235886, completion.count
-  # end
+  def test_populate_adds_dictionary_words
+    completion= CompleteMe.new
+    dictionary = File.read("/usr/share/dict/words")
+    completion.populate(dictionary)
+
+    assert_equal 235886, completion.count
+  end
 
   def test_find_prefix_iterates_to_last_node_and_returns_node
     completion = CompleteMe.new

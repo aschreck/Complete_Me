@@ -51,14 +51,12 @@ class Trie
 
   def create_addresses_file_from_csv
     addresses = File.new('data/addresses.txt', 'w+')
-    path = 'data/addresses.csv'
-    csv = CSV.read(path, :headers=> true)
-    address_array = csv['FULL_ADDRESS']
-    address_array.each do |address|
+    csv = CSV.read('data/addresses.csv', :headers=> true)
+
+    csv['FULL_ADDRESS'].each do |address|
       addresses.write(address + "\n")
     end
-    file = File.open('data/addresses.txt')
-    populate(file)
+    populate(File.open('data/addresses.txt'))
   end
 
 end
